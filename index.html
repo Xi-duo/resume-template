@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你的姓名 · 前端开发实习生 · 你的学校</title>
+<style>
+  /* ==========================================================
+     Design tokens — 修改这里的颜色来换主题
+     ========================================================== */
+  :root {
+    --color-text: #1a1f2e;
+    --color-text-muted: #5b6678;
+    --color-accent: #2563eb;      /* 主色调，可改成 #7c3aed（紫）/ #059669（绿）等 */
+    --color-accent-soft: #dbeafe;
+    --color-border: #e4e8ef;
+    --color-bg: #fafbfd;
+    --color-tag-bg: #f1f5fb;
+    --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue",
+                  "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", "SF Mono", Consolas, Monaco, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 13px; }
+  @media (max-width: 768px) { html { font-size: 12.5px; } }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 20px auto;
+    padding: 32px 40px 24px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04),
+                0 8px 24px rgba(15, 23, 42, 0.04);
+  }
+
+  a { color: var(--color-accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+
+  /* ==========================================================
+     Header
+     ========================================================== */
+  header.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--color-text);
+    margin-bottom: 18px;
+  }
+  header.head .id .name {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  header.head .id .role {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+  header.head .id .role strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  header.head .contact {
+    text-align: right;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+  header.head .contact .row { white-space: nowrap; }
+  header.head .contact .row .label {
+    display: inline-block;
+    width: 3.6em;
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    margin-right: 4px;
+  }
+  header.head .contact .row .value {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  /* ==========================================================
+     Section
+     ========================================================== */
+  section.block { margin-top: 18px; }
+  section.block:first-of-type { margin-top: 0; }
+
+  section.block > h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  section.block > h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right,
+                  var(--color-accent-soft), transparent);
+  }
+
+  /* ==========================================================
+     Timeline (experience + projects)
+     ========================================================== */
+  .timeline { position: relative; padding-left: 18px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 4px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--color-border);
+  }
+  .entry { position: relative; padding-bottom: 12px; }
+  .entry:last-child { padding-bottom: 0; }
+  .entry::before {
+    content: "";
+    position: absolute;
+    left: -18px; top: 7px;
+    width: 10px; height: 10px;
+    background: #fff;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #fff;
+  }
+  .entry .meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+  }
+  .entry .meta-row .title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+  .entry .meta-row .date {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+  .entry .subtitle {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 4px;
+  }
+  .entry .subtitle .stack {
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  .entry ul.bullets {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 3px;
+  }
+  .entry ul.bullets li {
+    position: relative;
+    padding-left: 14px;
+    margin-bottom: 3px;
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+  .entry ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 9px;
+    width: 5px; height: 2px;
+    background: var(--color-text-muted);
+    border-radius: 1px;
+  }
+  .entry ul.bullets li strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  /* em 标签 = 技术关键词高亮 */
+  .entry ul.bullets li em {
+    font-style: normal;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    padding: 0 4px;
+    border-radius: 3px;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+  }
+
+  /* ==========================================================
+     Summary
+     ========================================================== */
+  .summary {
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    background: var(--color-tag-bg);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.86rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+  .summary strong { color: var(--color-accent); font-weight: 600; }
+
+  /* ==========================================================
+     Skills tags
+     ========================================================== */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 6em 1fr;
+    gap: 5px 14px;
+    align-items: start;
+  }
+  .skills-grid .cat {
+    font-size: 0.82rem;
+    color: var(--color-text);
+    font-weight: 600;
+    padding-top: 3px;
+  }
+  .skills-grid .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .skills-grid .tag {
+    background: var(--color-tag-bg);
+    color: var(--color-text);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.76rem;
+    font-family: var(--font-mono);
+    border: 1px solid var(--color-border);
+  }
+  /* accent tag = 核心技能，加蓝色背景 */
+  .skills-grid .tag.accent {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    border-color: transparent;
+    font-weight: 600;
+  }
+
+  /* ==========================================================
+     Print (A4) — 打印/导出 PDF 用
+     ========================================================== */
+  @media print {
+    @page { size: A4; margin: 10mm 12mm; }
+    html, body { background: #fff; font-size: 11px; }
+    .page {
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    section.block { page-break-inside: avoid; margin-top: 12px; }
+    .entry { page-break-inside: avoid; padding-bottom: 8px; }
+    .entry ul.bullets li { margin-bottom: 2px; }
+    a { color: var(--color-text); }
+    footer.foot { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 24px 16px; margin: 6px; }
+    header.head { flex-direction: column; align-items: flex-start; gap: 12px; }
+    header.head .contact { text-align: left; }
+    .skills-grid { grid-template-columns: 1fr; gap: 3px 0; }
+    .skills-grid .cat { padding-top: 6px; }
+  }
+
+  /* ==========================================================
+     Footer
+     ========================================================== */
+  footer.foot {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HEAD ===== -->
+  <header class="head">
+    <div class="id">
+      <div class="name">你的姓名</div>
+      <div class="role">
+        <strong>前端开发实习生</strong> · 你的学校 · 你的专业 · 202X 届本科
+      </div>
+    </div>
+    <div class="contact">
+      <div class="row"><span class="label">邮箱</span><span class="value">your@email.com</span></div>
+      <div class="row"><span class="label">电话</span><span class="value">1xx xxxx xxxx</span></div>
+      <div class="row"><span class="label">GitHub</span><a class="value" href="https://github.com/your-username">github.com/your-username</a></div>
+      <!-- 可选：加微信 / 掘金 / 个人网站 -->
+    </div>
+  </header>
+
+  <!-- ===== Summary（个人亮点，2-3 句话）===== -->
+  <div class="summary">
+    用 <strong>2-3 句话</strong>概括你的技术方向和核心亮点。
+    例如：专注 <strong>XX 方向</strong>的前端工程师，有 <strong>某技术</strong> 实战经验；
+    发布过 <strong>X 个开源项目</strong>，偏好「先设计再动手」的工程思维。
+  </div>
+
+  <!-- ===== 实习经历 ===== -->
+  <section class="block">
+    <h2>实习经历</h2>
+    <div class="timeline">
+
+      <div class="entry">
+        <div class="meta-row">
+          <div class="title">公司名称 · 岗位名称</div>
+          <div class="date">202X.XX — 202X.XX</div>
+        </div>
+        <div class="subtitle">
+          业务方向描述 ·
+          <span class="stack">技术栈 A · 技术栈 B · 技术栈 C</span>
+        </div>
+        <ul class="bullets">
+          <li>用 <strong>STAR 格式</strong>描述你做了什么、怎么做的、结果如何。
+            技术关键词用 <em>em 标签</em>高亮，重要结论用 <strong>strong</strong> 加粗。
+            尽量有<strong>量化数字</strong>（性能提升 XX%、响应时间从 Xs 降至 Xms）。</li>
+          <li>第二条 bullet：另一个核心贡献，聚焦技术难点与解决思路。</li>
+          <li>第三条 bullet：可以讲工程化、跨团队协作、或发布了什么。</li>
+        </ul>
+      </div>
+
+      <!-- 如有第二段实习，复制上方 .entry 并填写 -->
+      <div class="entry">
+        <div class="meta-row">
+          <div class="title">公司名称 · 岗位名称</div>
+          <div class="date">202X.XX — 202X.XX</div>
+        </div>
+        <div class="subtitle">
+          <span class="stack">技术栈 A · 技术栈 B</span>
+        </div>
+        <ul class="bullets">
+          <li>Bullet 1：你的核心贡献，技术关键词用 <em>em</em> 标签，重要结论用 <strong>strong</strong>。</li>
+          <li>Bullet 2：另一个贡献点。</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== 项目经历 ===== -->
+  <section class="block">
+    <h2>项目经历</h2>
+    <div class="timeline">
+
+      <div class="entry">
+        <div class="meta-row">
+          <div class="title">项目名称 · 一句话描述</div>
+          <div class="date"><a href="https://github.com/your-username/repo">GitHub</a></div>
+        </div>
+        <div class="subtitle">
+          <span class="stack">技术栈 A · 技术栈 B · 技术栈 C</span>
+        </div>
+        <ul class="bullets">
+          <li>Bullet 1：核心功能 / 技术亮点，技术词用 <em>em</em>，量化结果用 <strong>strong</strong>。</li>
+          <li>Bullet 2：你解决的关键难题，或架构设计思路。</li>
+        </ul>
+      </div>
+
+      <!-- 可继续添加更多项目 -->
+
+    </div>
+  </section>
+
+  <!-- ===== 个人能力 ===== -->
+  <section class="block">
+    <h2>个人能力</h2>
+    <div class="skills-grid">
+
+      <div class="cat">前端核心</div>
+      <div class="tags">
+        <!-- accent 类 = 熟练/核心技能；普通 tag = 了解/使用过 -->
+        <span class="tag accent">React</span>
+        <span class="tag accent">TypeScript</span>
+        <span class="tag">Vue</span>
+        <span class="tag">Next.js</span>
+        <span class="tag">Tailwind</span>
+        <span class="tag">HTML5 / CSS3</span>
+      </div>
+
+      <div class="cat">工程化</div>
+      <div class="tags">
+        <span class="tag accent">Vite</span>
+        <span class="tag">Webpack</span>
+        <span class="tag">ESLint / Prettier</span>
+        <span class="tag">CI/CD</span>
+      </div>
+
+      <!-- 根据你的方向增减类别 -->
+      <div class="cat">其他能力</div>
+      <div class="tags">
+        <span class="tag">Node.js</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Git</span>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="foot">
+    本简历最后更新于 202X.XX · 可按 Cmd/Ctrl + P 导出 PDF
+  </footer>
+
+</div>
+</body>
+</html>
