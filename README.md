@@ -2,7 +2,7 @@
 
 一份单文件 HTML 简历模板，无依赖、可直接打印为 A4 PDF。
 
-**[在线预览 →](https://your-username.github.io/resume-template)**
+**[在线预览 →](https://xi-duo.github.io/resume-template)**
 
 ---
 
