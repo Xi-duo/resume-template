@@ -1,6 +1,6 @@
-# 前端简历模板 · Frontend Resume Template
+# 简历模板 · Resume Template
 
-一份单文件 HTML 简历模板，无依赖、可直接打印为 A4 PDF。
+一份单文件 HTML 简历模板，无依赖、可直接打印为 A4 PDF。适用于任何岗位（前端/后端/算法/产品/设计...）。
 
 **[在线预览 →](https://xi-duo.github.io/resume-template)**
 
